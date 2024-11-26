@@ -148,7 +148,7 @@ function App() {
 
       {/* Footer */}
       <footer className="footer">
-        <p>&copy; 2024 Hand Detection App. Built with React and TensorFlow.js</p>
+        <p>&copy; 2024 Sign Detection App. Built with React and TensorFlow.js</p>
       </footer>
     </div>
   );
