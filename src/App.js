@@ -5,8 +5,6 @@ import Webcam from "react-webcam";
 import "./App.css";
 import { drawHand } from "./utilities";
 import * as fp from "fingerpose";
-import victory from "./victory.jpeg";
-import thumbs_up from "./thumbs-up.png";
 
 function App() {
   const webcamRef = useRef(null);
@@ -15,6 +13,7 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [modelActive, setModelActive] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
+  const [gestureConfidence, setGestureConfidence] = useState(0); // Confidence state
 
   const runHandpose = async () => {
     try {
@@ -57,10 +56,16 @@ function App() {
           const highestGesture = gesture.gestures.reduce((prev, current) =>
             prev.score > current.score ? prev : current
           );
+
+          setGestureConfidence(highestGesture.score); // Update confidence
+
           if (highestGesture.score > 0.9) {
             console.log(`Sign Detected: ${highestGesture.name}`);
-            setMessage(`Sign Detected: ${highestGesture.name}`);
+            setMessage(`${highestGesture.name} Detected!`);
           }
+        } else {
+          setGestureConfidence(0); // Reset confidence if no gesture
+          setMessage(null); // Reset message when no gesture detected
         }
       }
 
@@ -87,7 +92,6 @@ function App() {
 
   useEffect(() => {
     return () => {
-      // Cleanup on component unmount
       if (intervalId) clearInterval(intervalId);
     };
   }, [intervalId]);
@@ -123,11 +127,23 @@ function App() {
 
       {/* Main Content */}
       <main className="main-content">
-        <p className="message">{message}</p>
+        <p className={`message ${message ? "bold-message" : ""}`}>{message}</p> {/* Enhanced message */}
         <div className="webcam-container">
           <Webcam ref={webcamRef} className="webcam" />
           <canvas ref={canvasRef} className="canvas" />
         </div>
+
+        {/* Confidence Bar */}
+        <div className="confidence-bar-container">
+          <div
+            className="confidence-bar"
+            style={{
+              width: `${gestureConfidence * 100}%`,
+              backgroundColor: gestureConfidence > 0.9 ? "green" : "orange",
+            }}
+          ></div>
+        </div>
+
         <button
           className="toggle-button"
           onClick={toggleModel}

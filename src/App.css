@@ -113,6 +113,12 @@ body {
   color: #007bff;
 }
 
+.bold-message {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #28a745; /* Green color for detected gestures */
+}
+
 .webcam-container {
   position: relative;
   width: 100%;
@@ -145,4 +151,18 @@ body {
   bottom: 0;
   width: 100%;
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.confidence-bar-container {
+  width: 100%;
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 5px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.confidence-bar {
+  height: 100%;
+  transition: width 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
